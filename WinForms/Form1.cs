@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +25,8 @@ namespace WinForms
         {
             timer1.Enabled = true;
             
+
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -32,9 +35,10 @@ namespace WinForms
         }
 
         //多线程测试
-        private  void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-             ThreadTest();
+            Log.Information("多线程测试");
+            ThreadTest();
         }
         
         // 异步多线程
@@ -77,6 +81,11 @@ namespace WinForms
         {
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox2.Text += $"{Application.ExecutablePath}\r\n";
         }
     }
 }
