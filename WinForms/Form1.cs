@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using CommonV5;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,8 @@ namespace WinForms
 {
     public partial class Form1 : Form
     {
-        CommonV5.CommonHelper commonHelper = new CommonV5.CommonHelper();
+        CommonHelper commonHelper = new CommonHelper();
+        
         int taskCount = 0;
         public Form1()
         {
@@ -48,7 +50,7 @@ namespace WinForms
             await Task.Run(() =>
             {
                 int i = 0;
-                while (i < 50)
+                while (i < 100)
                 {
                     i++;
                     string threadId = Thread.CurrentThread.ManagedThreadId.ToString();
@@ -86,6 +88,70 @@ namespace WinForms
         private void button2_Click(object sender, EventArgs e)
         {
             textBox2.Text += $"{Application.ExecutablePath}\r\n";
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string filepath = "C:\\Users\\Administrator\\Desktop\\公安自建推给雪亮的视频监控.xls";
+            DataTable dt = ExcelHelper.ExcelToDataTable(filepath);
+            dataGridView1.DataSource = dt;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DataTable dt = new DataTable("table") { };
+            DataColumn dc1 = new DataColumn("A");
+            DataColumn dc2 = new DataColumn("B");
+            dt.Columns.Add(dc1);
+            dt.Columns.Add(dc2);
+            for (int i = 0; i < 10; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = $"a{i}";
+                dr[1] = $"b{i}";
+                dt.Rows.Add(dr);
+            }
+            if(ExcelHelper.DataTableToExcel(dt, "C:\\Users\\Administrator\\Desktop\\test.xlsx"))
+            {
+                textBox3.Text = "ok";
+            }
+            else
+            {
+                textBox3.Text = "Error";
+            }
+            
+            
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DataTable dt = new DataTable("table") { };
+            DataColumn dc1 = new DataColumn("A");
+            DataColumn dc2 = new DataColumn("B");
+            dt.Columns.Add(dc1);
+            dt.Columns.Add(dc2);
+            for (int i = 0; i < 10; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = $"a{i}";
+                dr[1] = $"b{i}";
+                dt.Rows.Add(dr);
+            }
+            if (CsvHelper.DataTableToCsv(dt, "C:\\Users\\Administrator\\Desktop\\test.csv"))
+            {
+                textBox4.Text = "ok";
+            }
+            else
+            {
+                textBox4.Text = "Error";
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string filepath = "C:\\Users\\Administrator\\Desktop\\test.csv";
+            DataTable dt = CsvHelper.CsvToDataTable(filepath);
+            dataGridView1.DataSource = dt;
         }
     }
 }
