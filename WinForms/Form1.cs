@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,7 +17,9 @@ namespace WinForms
     public partial class Form1 : Form
     {
         CommonHelper commonHelper = new CommonHelper();
-        
+        string ftpPath = "ftp://153.37.151.130/ftper/";
+        FtpHelper ftpHelper = new FtpHelper("ftper", "Admin12345");
+
         int taskCount = 0;
         public Form1()
         {
@@ -26,9 +29,6 @@ namespace WinForms
         private void Form1_Load(object sender, EventArgs e)
         {
             timer1.Enabled = true;
-            
-
-
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -152,6 +152,80 @@ namespace WinForms
             string filepath = "C:\\Users\\Administrator\\Desktop\\test.csv";
             DataTable dt = CsvHelper.CsvToDataTable(filepath);
             dataGridView1.DataSource = dt;
+        }
+
+        private async void button7_Click(object sender, EventArgs e)
+        {
+            List<string> filePathList = await ftpHelper.GetFtpFileList(ftpPath);
+            comboBox1.Items.AddRange(filePathList.ToArray());
+            comboBox1.SelectedIndex = 0;
+        }
+
+        private async void button8_Click(object sender, EventArgs e)
+        {
+            string ftpFilePath = comboBox1.SelectedItem.ToString();
+            using (Stream memoryStream = await ftpHelper.DownloadFile2Stream(ftpFilePath))
+            {
+                using(FileStream fs = new FileStream("C:\\Users\\Administrator\\Desktop\\ftpfile", FileMode.Create))
+                {
+                    byte[] buffer = new byte[1024];
+                    while (true)
+                    {
+                        int sz = memoryStream.Read(buffer, 0, 1024);
+                        if (sz == 0) break;
+                        fs.Write(buffer, 0, sz);
+                    }
+                    MessageBox.Show("下载完成");
+                }
+            }
+            
+        }
+
+        private async void button9_Click(object sender, EventArgs e)
+        {
+            string ftpFilePath = comboBox1.SelectedItem.ToString();
+            string localFilePath = "C:\\Users\\Administrator\\Desktop\\" + ftpFilePath.Split("/").ToList()[ftpFilePath.Split("/").ToList().Count-1];
+            await ftpHelper.DownloadFile2Local(ftpFilePath, localFilePath);
+            MessageBox.Show("完成");
+        }
+
+        private async void button10_Click(object sender, EventArgs e)
+        {
+            using (FileStream fs = new FileStream("C:\\Users\\Administrator\\Desktop\\新建文本文档.txt", FileMode.Open))
+            {
+               await ftpHelper.UploadFile(fs, "ftp://153.37.151.130/ftper/test.txt");
+                MessageBox.Show("ok");
+            }
+
+        }
+
+        private async void button11_Click(object sender, EventArgs e)
+        {
+            DialogResult result= openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                FileInfo localFile = new FileInfo(openFileDialog1.FileName);
+                if(await ftpHelper.UploadFile(localFile, "ftp://153.37.151.130/ftper/"))
+                {
+                    MessageBox.Show("ok");
+                }
+            }
+           
+        }
+
+        private async void button12_Click(object sender, EventArgs e)
+        {
+            string ftpFilePath = comboBox1.SelectedItem.ToString();
+            await ftpHelper.Delete(ftpFilePath);
+        }
+
+        private async void button13_Click(object sender, EventArgs e)
+        {
+            string ftpDicPath = ftpPath + textBox5.Text;
+            if(await ftpHelper.MakeDir(ftpDicPath))
+            {
+                MessageBox.Show("ok");
+            }
         }
     }
 }
