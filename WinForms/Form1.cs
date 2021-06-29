@@ -227,5 +227,33 @@ namespace WinForms
                 MessageBox.Show("ok");
             }
         }
+
+        private async void button14_Click(object sender, EventArgs e)
+        {
+            string filePath = "C:\\Users\\Administrator\\Desktop\\道闸.jpg";
+            using (FileStream fs = new FileStream(filePath,FileMode.Open))
+            {
+                string result=  await Base64Helper.Stream2Base64(fs);
+                textBox6.Text = $"{result.Substring(0, 1000)}..."; 
+            }
+        }
+
+        private async void button15_Click(object sender, EventArgs e)
+        {
+            FileInfo fileInfo = new FileInfo("C:\\Users\\Administrator\\Desktop\\道闸.jpg");
+            string result = await Base64Helper.File2Base64(fileInfo);
+            textBox6.Text = $"{result.Substring(0, 1000)}...";
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            string base64String = textBox6.Text;
+            string imgPath = "C:\\Users\\Administrator\\Desktop\\22.jpg";
+            bool result = Base64Helper.Base64SaveImage(imgPath, base64String);
+            if (result)
+            {
+                MessageBox.Show("ok");
+            }
+        }
     }
 }

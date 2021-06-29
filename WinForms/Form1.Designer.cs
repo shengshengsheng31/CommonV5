@@ -53,6 +53,10 @@ namespace WinForms
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.textBox5 = new System.Windows.Forms.TextBox();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.button16 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -258,11 +262,53 @@ namespace WinForms
             this.textBox5.Size = new System.Drawing.Size(112, 23);
             this.textBox5.TabIndex = 21;
             // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(457, 29);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(91, 23);
+            this.button14.TabIndex = 22;
+            this.button14.Text = "流转base64";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button15
+            // 
+            this.button15.Location = new System.Drawing.Point(554, 29);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(104, 23);
+            this.button15.TabIndex = 23;
+            this.button15.Text = "文件转base64";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(457, 70);
+            this.textBox6.Multiline = true;
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(201, 68);
+            this.textBox6.TabIndex = 24;
+            // 
+            // button16
+            // 
+            this.button16.Location = new System.Drawing.Point(457, 156);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(201, 23);
+            this.button16.TabIndex = 25;
+            this.button16.Text = "base64转图";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button16);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.button15);
+            this.Controls.Add(this.button14);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
@@ -318,6 +364,10 @@ namespace WinForms
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Button button16;
     }
 }
 
