@@ -3,6 +3,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -254,6 +255,14 @@ namespace WinForms
             {
                 MessageBox.Show("ok");
             }
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            ConfigHelper.AddConfig("Name", "KK");
+            string name = ConfigHelper.GetConfig("Name");
+            bool result = ConfigHelper.SetConfig("Name","asd");
+            bool result2 = ConfigHelper.DelConfig("Name");
         }
     }
 }

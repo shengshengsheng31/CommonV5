@@ -57,6 +57,7 @@ namespace WinForms
             this.button15 = new System.Windows.Forms.Button();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.button16 = new System.Windows.Forms.Button();
+            this.button17 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -300,11 +301,22 @@ namespace WinForms
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.button16_Click);
             // 
+            // button17
+            // 
+            this.button17.Location = new System.Drawing.Point(457, 195);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(114, 23);
+            this.button17.TabIndex = 26;
+            this.button17.Text = "配置文件创建读取";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button17);
             this.Controls.Add(this.button16);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.button15);
@@ -368,6 +380,7 @@ namespace WinForms
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Button button17;
     }
 }
 
