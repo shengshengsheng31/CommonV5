@@ -18,6 +18,7 @@ namespace WinForms
             // 日志记录，使用serilog接管全局日志
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.File($"logs\\{Application.ProductName}[{Application.ProductVersion}].log", rollingInterval: RollingInterval.Day)
+                .MinimumLevel.Debug()
                 .CreateLogger();
             Log.Information("开始运行");
 

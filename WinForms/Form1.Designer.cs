@@ -58,6 +58,8 @@ namespace WinForms
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.button16 = new System.Windows.Forms.Button();
             this.button17 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
+            this.button19 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -305,17 +307,39 @@ namespace WinForms
             // 
             this.button17.Location = new System.Drawing.Point(457, 195);
             this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(114, 23);
+            this.button17.Size = new System.Drawing.Size(201, 23);
             this.button17.TabIndex = 26;
             this.button17.Text = "配置文件创建读取";
             this.button17.UseVisualStyleBackColor = true;
             this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
+            // button18
+            // 
+            this.button18.Location = new System.Drawing.Point(457, 230);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(91, 23);
+            this.button18.TabIndex = 27;
+            this.button18.Text = "压缩";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
+            // button19
+            // 
+            this.button19.Location = new System.Drawing.Point(567, 230);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(91, 23);
+            this.button19.TabIndex = 28;
+            this.button19.Text = "解压";
+            this.button19.UseVisualStyleBackColor = true;
+            this.button19.Click += new System.EventHandler(this.button19_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button19);
+            this.Controls.Add(this.button18);
             this.Controls.Add(this.button17);
             this.Controls.Add(this.button16);
             this.Controls.Add(this.textBox6);
@@ -381,6 +405,8 @@ namespace WinForms
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.Button button19;
     }
 }
 

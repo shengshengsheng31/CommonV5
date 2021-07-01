@@ -264,5 +264,28 @@ namespace WinForms
             bool result = ConfigHelper.SetConfig("Name","asd");
             bool result2 = ConfigHelper.DelConfig("Name");
         }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            string dirPath = @"C:\Users\Administrator\Desktop\新建文件夹";
+            DirectoryInfo directory = new DirectoryInfo(dirPath);
+            FileInfo[] fileList = directory.GetFiles();
+            string zipFilePath = "C:\\Users\\Administrator\\Desktop\\1.zip";
+            
+           if(ArchiveHelper.Zip(fileList, zipFilePath))
+            {
+                MessageBox.Show("ok");
+            }
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            string zipFilePath = "C:\\Users\\Administrator\\Desktop\\1.zip";
+            string extractPath = "C:\\Users\\Administrator\\Desktop\\111";
+            if(ArchiveHelper.Extract(zipFilePath, extractPath))
+            {
+                MessageBox.Show("ok");
+            }
+        }
     }
 }
