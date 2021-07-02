@@ -17,18 +17,18 @@ namespace CommonV5
         /// <param name="fileList"></param>
         /// <param name="zipFilePath"></param>
         /// <returns></returns>
-        public static bool Zip(FileInfo[] fileList,string zipFilePath)
+        public static bool Zip(FileInfo[] fileList,string zipFilePath,bool deleteSource=false)
         {
             try
             {
-                foreach (FileInfo file in fileList)
+                using (FileStream zipToOpen = new FileStream(zipFilePath, FileMode.OpenOrCreate))
                 {
-                    string filePath = file.FullName;
-                    string fileName = file.Name;
-                    using (FileStream zipToOpen = new FileStream(zipFilePath, FileMode.OpenOrCreate))
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
                     {
-                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                        foreach (FileInfo file in fileList)
                         {
+                            string filePath = file.FullName;
+                            string fileName = file.Name;
                             // 同名文件覆盖
                             if (archive.GetEntry(fileName) != null)
                             {
@@ -37,12 +37,17 @@ namespace CommonV5
                             }
                             ZipArchiveEntry archiveEntry = archive.CreateEntryFromFile(filePath, fileName);
                             Log.Debug($"压缩{fileName}-ok");
+                            if (deleteSource)
+                            {
+                                file.Delete();
+                                Log.Debug($"删除源文件{fileName}-ok");
+                            }
                         }
+                        Log.Information($"完成压缩{zipFilePath}-ok");
+                        return true;
                     }
                 }
-                Log.Information($"完成压缩{zipFilePath}-ok");
-                return true;
-
+                
             }
             catch (Exception ex)
             {

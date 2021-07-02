@@ -272,7 +272,7 @@ namespace WinForms
             FileInfo[] fileList = directory.GetFiles();
             string zipFilePath = "C:\\Users\\Administrator\\Desktop\\1.zip";
             
-           if(ArchiveHelper.Zip(fileList, zipFilePath))
+           if(ArchiveHelper.Zip(fileList, zipFilePath,false))
             {
                 MessageBox.Show("ok");
             }
