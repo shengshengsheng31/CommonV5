@@ -287,5 +287,16 @@ namespace WinForms
                 MessageBox.Show("ok");
             }
         }
+
+        private async void button20_Click(object sender, EventArgs e)
+        {
+            //string url = "https://vimsky.com/wp-content/themes/mytux/images/vimsky-logo.png";
+            string url = "https://www.baidu.com/link?url=GIdzSbSFhn7hLC0uXZUxuZb3O8vm46CTBtScgQc8YL8Z1Aihuo-1u9OEVA5T5pjR_zz5jp9kQlY8Q7wN9yGKjVqPwFgwboHpoeC8FMcGLwC&wd=&eqid=93439034000242180000000560ded9d8";
+            string filePath = "2.jpg";
+            if (await DownloadHelper.Download(url, filePath))
+            {
+                MessageBox.Show("ok");
+            }
+        }
     }
 }
