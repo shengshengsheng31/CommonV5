@@ -15,11 +15,11 @@ namespace CommonV5
         /// kafka消费
         /// </summary>
         /// <param name="bootstrapserver"></param>
-        /// <param name="toppicName"></param>
+        /// <param name="topicName"></param>
         /// <param name="groupId"></param>
         /// <param name="MessageHandler"></param>
         /// <param name="cts"></param>
-        public static void KafkaConsumer(string bootstrapserver, string toppicName, string groupId, CancellationTokenSource cts, bool isAlwaysLatest,Action<string> MessageHandler)
+        public static void KafkaConsumer(string bootstrapserver, string topicName, string groupId, CancellationTokenSource cts, bool isAlwaysLatest,Action<string> MessageHandler)
         {
             // kafka配置
             ConsumerConfig conf = new ConsumerConfig
@@ -33,7 +33,7 @@ namespace CommonV5
             // 监听
             using (IConsumer<Ignore, string> consumer = new ConsumerBuilder<Ignore, string>(conf).Build())
             {
-                consumer.Subscribe(toppicName);
+                consumer.Subscribe(topicName);
                 while (consumer.Assignment.Count==0)
                 {
                     // 等待一会，获取partition数量
@@ -43,11 +43,11 @@ namespace CommonV5
                 {
                     for (int i = 0; i < consumer.Assignment.Count; i++)
                     {
-                        TopicPartition topicPartition = new TopicPartition(toppicName, i);
+                        TopicPartition topicPartition = new TopicPartition(topicName, i);
                         consumer.Seek(new TopicPartitionOffset(topicPartition, consumer.GetWatermarkOffsets(topicPartition).High));
                     }
                 }
-                Log.Information($"topic:{toppicName} partitionCount:{consumer.Assignment.Count}");
+                Log.Information($"topic:{topicName} partitionCount:{consumer.Assignment.Count}");
                 try
                 {
                     // 持续监听至cancel
@@ -77,5 +77,35 @@ namespace CommonV5
                 }
             }
         }
+
+        /// <summary>
+        /// kafka生产
+        /// </summary>
+        /// <param name="bootstrapserver"></param>
+        /// <param name="topicName"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static async Task<bool> KafkaProducer(string bootstrapserver,string topicName,string data)
+        {
+            try
+            {
+                ProducerConfig conf = new ProducerConfig
+                {
+                    BootstrapServers = bootstrapserver,
+                };
+                using (IProducer<Null, string> producer = new ProducerBuilder<Null, string>(conf).Build())
+                {
+                    DeliveryResult<Null, string> result = await producer.ProduceAsync(topicName, new Message<Null, string> { Value = data });
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return false;
+            }
+            
+        }
+
     }
 }

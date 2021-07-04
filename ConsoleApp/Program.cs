@@ -22,35 +22,44 @@ namespace ConsoleApp
             Console.WriteLine("Hello World!");
 
             string bootstrapserver = "49.234.93.236:9092";
-            string toppicName = "test";
+            string topicName = "test";
             string groupId = "sheng31";
             //string bootstrapserver = "32.96.1.69:9092";
             //string toppicName = "BAYONET_VEHICLEPASS_JSON_TOPIC";
             //string groupId = "sheng31";
 
-            CancellationTokenSource cts = new CancellationTokenSource();
-            // 停止消费
-            Console.CancelKeyPress += (_, e) =>
+            #region kafka消费
+            //CancellationTokenSource cts = new CancellationTokenSource();
+            //// 停止消费
+            //Console.CancelKeyPress += (_, e) =>
+            //{
+            //    e.Cancel = true;
+            //    cts.Cancel();
+            //};
+            //KafkaHelper.KafkaConsumer(bootstrapserver, toppicName, groupId, cts, true, value =>
+            // {
+            //     try
+            //     {
+            //         VehicleDto.Root vehicle = JsonSerializer.Deserialize<VehicleDto.Root>(value);
+            //         string plateNo = vehicle.vehicleRcogResult[0].target[0].vehicle.plateNo.value;
+            //         string passTime = vehicle.vehicleRcogResult[0].targetAttrs.passTime;
+            //         string crossingName = vehicle.vehicleRcogResult[0].targetAttrs.cameraName;
+            //         Console.WriteLine($"passTime:{passTime}-plateNo:{plateNo}-crossingName{crossingName}");
+            //     }
+            //    // 解析失败
+            //    catch (Exception)
+            //     {
+            //         Console.WriteLine(value);
+            //     }
+            // }); 
+            #endregion
+
+            #region kafka生产
+            if( KafkaHelper.KafkaProducer(bootstrapserver, topicName, "a").Result)
             {
-                e.Cancel = true;
-                cts.Cancel();
-            };
-            KafkaHelper.KafkaConsumer(bootstrapserver, toppicName, groupId, cts,true, value =>
-            {
-                try
-                {
-                    VehicleDto.Root vehicle = JsonSerializer.Deserialize<VehicleDto.Root>(value);
-                    string plateNo = vehicle.vehicleRcogResult[0].target[0].vehicle.plateNo.value;
-                    string passTime = vehicle.vehicleRcogResult[0].targetAttrs.passTime;
-                    string crossingName = vehicle.vehicleRcogResult[0].targetAttrs.cameraName;
-                    Console.WriteLine($"passTime:{passTime}-plateNo:{plateNo}-crossingName{crossingName}");
-                }
-                // 解析失败
-                catch (Exception)
-                {
-                    Console.WriteLine(value);
-                }
-            });
+                Console.WriteLine("ok");
+            }
+            #endregion
             Console.ReadLine();
         }
 
