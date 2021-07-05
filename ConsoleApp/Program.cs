@@ -55,10 +55,15 @@ namespace ConsoleApp
             #endregion
 
             #region kafka生产
-            if( KafkaHelper.KafkaProducer(bootstrapserver, topicName, "a").Result)
-            {
-                Console.WriteLine("ok");
-            }
+            //if( KafkaHelper.KafkaProducer(bootstrapserver, topicName, "a").Result)
+            //{
+            //    Console.WriteLine("ok");
+            //}
+            #endregion
+
+
+            #region mq消费
+            MqHelper.MqConsumer("sheng31", "test.ranye.net", "home/sensor/#", "sheng31", null);
             #endregion
             Console.ReadLine();
         }
