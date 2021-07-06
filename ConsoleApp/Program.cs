@@ -61,9 +61,35 @@ namespace ConsoleApp
             //}
             #endregion
 
-
+            
             #region mq消费
-            MqHelper.MqConsumer("sheng31", "test.ranye.net", "home/sensor/#", "sheng31", null);
+            string clientID = "sheng31";
+            string ip = "test.ranye-iot.net";
+            string topic = "home/sensor/#";
+            string userName = "sheng31";
+            string password = null;
+            CancellationTokenSource cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, e) =>
+            {
+                Console.WriteLine(e.Cancel.ToString());
+                try
+                {
+                    Console.Read();
+                    Console.WriteLine(111);
+                    e.Cancel = true;
+                    cts.Cancel();
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                
+            };
+            MqHelper.MqConsumer(clientID, ip, topic, userName, password,cts,new Action<string>(message=>
+            {
+                Console.WriteLine(message);
+            }));
             #endregion
             Console.ReadLine();
         }
