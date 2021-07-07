@@ -66,8 +66,8 @@ namespace ConsoleApp
             string clientID = "sheng31";
             string ip = "test.ranye-iot.net";
             string topic = "home/sensor/#";
-            string userName = "sheng31";
-            string password = null;
+            string userName = "test-user";
+            string password = "ranye-iot";
             CancellationTokenSource cts = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) =>
             {

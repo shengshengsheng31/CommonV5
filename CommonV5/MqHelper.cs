@@ -10,12 +10,23 @@ namespace CommonV5
 {
     public class MqHelper
     {
-        public static void MqConsumer(string clientId,string ip,string topic,string userName,string password, CancellationTokenSource cts, Action<string> MessageHandler)
+        //MqttFactory factory = new MqttFactory();
+        static IMqttClient mqttClient= new MqttFactory().CreateMqttClient();
+
+        /// <summary>
+        /// mqtt消费
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="ip"></param>
+        /// <param name="topic"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="cts"></param>
+        /// <param name="MessageHandler"></param>
+        public static void MqConsumer(string clientId, string ip, string topic, string userName, string password, CancellationTokenSource cts, Action<string> MessageHandler)
         {
-            MqttFactory factory = new MqttFactory();
-            IMqttClient mqttClient = factory.CreateMqttClient();
             IMqttClientOptions options;
-            if (password == null||password=="")
+            if (password == null || password == "")
             {
                 options = new MqttClientOptionsBuilder()
                     .WithClientId(clientId)
@@ -30,7 +41,7 @@ namespace CommonV5
                     .WithCredentials(userName, password)
                     .Build();
             }
-            
+
             // 连接到mq server触发事件
             mqttClient.UseConnectedHandler(async e =>
             {
@@ -40,10 +51,12 @@ namespace CommonV5
             });
 
             // 收到消息触发事件
-            mqttClient.UseApplicationMessageReceivedHandler(e =>
+            mqttClient.UseApplicationMessageReceivedHandler(async e =>
             {
                 string message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                MessageHandler(message);
+                var a= await mqttClient.UnsubscribeAsync(topic);
+                // 测试取消订阅消息
+                MessageHandler(e.ApplicationMessage.Topic);
                 //Console.WriteLine($"{message}---{e.ApplicationMessage.Topic}");
             });
 
@@ -52,19 +65,30 @@ namespace CommonV5
             {
                 Log.Error("断开连接-ok");
                 // 进行重连
-                mqttClient.ConnectAsync(options,cts.Token);
+                if (!cts.IsCancellationRequested)
+                {
+                    mqttClient.ConnectAsync(options, cts.Token);
+                }
             });
 
             try
             {
-                mqttClient.ConnectAsync(options,cts.Token);
+                mqttClient.ConnectAsync(options, cts.Token);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
                 throw;
             }
-            
         }
+        public static void DisposeMq()
+        {
+            mqttClient.Dispose();
+        }
+
+        // 配置
+
+        // mq生产
     }
+    
 }

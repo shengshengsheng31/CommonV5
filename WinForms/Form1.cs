@@ -298,5 +298,34 @@ namespace WinForms
                 MessageBox.Show("ok");
             }
         }
+
+        CancellationTokenSource cts = new CancellationTokenSource();
+        private void button21_Click(object sender, EventArgs e)
+        {
+            if (button21.Text=="mq消费")
+            {
+                button21.Text = "停止";
+                string clientId = "sheng31";
+                string ip = "test.ranye-iot.net";
+                string topic = "home/sensor/#";
+                string userName = "test-user";
+                string password = "";//ranye-iot
+                cts = new CancellationTokenSource();
+                MqHelper.MqConsumer(clientId, ip, topic, userName, password, cts, message =>
+                {
+                    Invoke(new Action(() =>
+                    {
+                        textBox7.Text += $"{message}\r\n";
+                    }));
+                });
+            }
+            else
+            {
+                button21.Text = "mq消费";
+                cts.Cancel();
+                MqHelper.DisposeMq();
+            }
+            
+        }
     }
 }
