@@ -63,33 +63,33 @@ namespace ConsoleApp
 
             
             #region mq消费
-            string clientID = "sheng31";
-            string ip = "test.ranye-iot.net";
-            string topic = "home/sensor/#";
-            string userName = "test-user";
-            string password = "ranye-iot";
-            CancellationTokenSource cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) =>
-            {
-                Console.WriteLine(e.Cancel.ToString());
-                try
-                {
-                    Console.Read();
-                    Console.WriteLine(111);
-                    e.Cancel = true;
-                    cts.Cancel();
-                }
-                catch (Exception ex)
-                {
+            //string clientID = "sheng31";
+            //string ip = "test.ranye-iot.net";
+            //string topic = "home/sensor/#";
+            //string userName = "test-user";
+            //string password = "ranye-iot";
+            //CancellationTokenSource cts = new CancellationTokenSource();
+            //Console.CancelKeyPress += (_, e) =>
+            //{
+            //    Console.WriteLine(e.Cancel.ToString());
+            //    try
+            //    {
+            //        Console.Read();
+            //        Console.WriteLine(111);
+            //        e.Cancel = true;
+            //        cts.Cancel();
+            //    }
+            //    catch (Exception ex)
+            //    {
 
-                    throw;
-                }
+            //        throw;
+            //    }
                 
-            };
-            MqHelper.MqConsumer(clientID, ip, topic, userName, password,cts,new Action<string>(message=>
-            {
-                Console.WriteLine(message);
-            }));
+            //};
+            //MqHelper.MqConsumer(clientID, ip, topic, userName, password,cts,new Action<string>(message=>
+            //{
+            //    Console.WriteLine(message);
+            //}));
             #endregion
             Console.ReadLine();
         }

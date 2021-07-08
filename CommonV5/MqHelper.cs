@@ -5,75 +5,48 @@ using Serilog;
 using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CommonV5
 {
     public class MqHelper
     {
-        //MqttFactory factory = new MqttFactory();
-        static IMqttClient mqttClient= new MqttFactory().CreateMqttClient();
-
+        private IMqttClient _mqttClient;
+        private IMqttClientOptions _mqttClientOptions;
+        
         /// <summary>
-        /// mqtt消费
+        /// 实例化后连接mq
         /// </summary>
         /// <param name="clientId"></param>
         /// <param name="ip"></param>
-        /// <param name="topic"></param>
         /// <param name="userName"></param>
         /// <param name="password"></param>
-        /// <param name="cts"></param>
-        /// <param name="MessageHandler"></param>
-        public static void MqConsumer(string clientId, string ip, string topic, string userName, string password, CancellationTokenSource cts, Action<string> MessageHandler)
+        public  MqHelper(string clientId,string ip,string userName,string password)
         {
-            IMqttClientOptions options;
-            if (password == null || password == "")
+            _mqttClient = new MqttFactory().CreateMqttClient();
+            MqttClientOptionsBuilder mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
+                .WithTcpServer(ip)
+                .WithClientId(clientId);
+            if (password != "" && password != null)
             {
-                options = new MqttClientOptionsBuilder()
-                    .WithClientId(clientId)
-                    .WithTcpServer(ip)
-                    .Build();
+                mqttClientOptionsBuilder.WithCredentials(userName, password);
             }
-            else
-            {
-                options = new MqttClientOptionsBuilder()
-                    .WithClientId(clientId)
-                    .WithTcpServer(ip)
-                    .WithCredentials(userName, password)
-                    .Build();
-            }
-
+            _mqttClientOptions = mqttClientOptionsBuilder.Build();
             // 连接到mq server触发事件
-            mqttClient.UseConnectedHandler(async e =>
+            _mqttClient.UseConnectedHandler(e =>
             {
                 Log.Information("连接服务器-ok");
-                await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(topic).Build());
-                Log.Information("订阅-ok");
             });
-
-            // 收到消息触发事件
-            mqttClient.UseApplicationMessageReceivedHandler(async e =>
-            {
-                string message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                var a= await mqttClient.UnsubscribeAsync(topic);
-                // 测试取消订阅消息
-                MessageHandler(e.ApplicationMessage.Topic);
-                //Console.WriteLine($"{message}---{e.ApplicationMessage.Topic}");
-            });
-
             // 断开连接或无法连接触发事件
-            mqttClient.UseDisconnectedHandler(e =>
+            _mqttClient.UseDisconnectedHandler(e =>
             {
-                Log.Error("断开连接-ok");
+                Log.Error($"断开连接{e.Exception} {e.Reason}");
                 // 进行重连
-                if (!cts.IsCancellationRequested)
-                {
-                    mqttClient.ConnectAsync(options, cts.Token);
-                }
+                _mqttClient.ConnectAsync(_mqttClientOptions);
             });
-
             try
             {
-                mqttClient.ConnectAsync(options, cts.Token);
+                _mqttClient.ConnectAsync(_mqttClientOptions).Wait();
             }
             catch (Exception ex)
             {
@@ -81,14 +54,75 @@ namespace CommonV5
                 throw;
             }
         }
-        public static void DisposeMq()
+
+        /// <summary>
+        /// 消费
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="MessageHandler"></param>
+        public async Task<bool> Subscribe(string topic, Action<string> MessageHandler)
         {
-            mqttClient.Dispose();
+            // 收到消息触发事件
+            _mqttClient.UseApplicationMessageReceivedHandler(e =>
+            {
+                string message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                MessageHandler($"{e.ApplicationMessage.Topic}:{message}");
+            });
+
+            if (_mqttClient.IsConnected)
+            {
+                try
+                {
+                    await _mqttClient.SubscribeAsync(topic);
+                    Log.Information($"订阅{topic}-ok");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, ex.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        // 配置
+        /// <summary>
+        /// 取消topic订阅
+        /// </summary>
+        /// <param name="topic"></param>
+        public async Task<bool> UnSubscribe(string topic)
+        {
+            try
+            {
+                await _mqttClient.UnsubscribeAsync(topic);
+                Log.Information($"取消订阅{topic}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return false;
+            }    
+        }
 
         // mq生产
+        public async Task<bool> MqProducer()
+        {
+            var message = new MqttApplicationMessageBuilder()
+                .WithTopic("MyTopic")
+                .WithPayload("Hello World")
+                .WithExactlyOnceQoS()
+                .WithRetainFlag()
+                .Build();
+
+            await _mqttClient.PublishAsync(message, CancellationToken.None);
+            return false;
+        }
+
+        
     }
     
 }
