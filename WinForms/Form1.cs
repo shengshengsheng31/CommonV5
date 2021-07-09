@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinForms.Model;
 
 namespace WinForms
 {
@@ -346,6 +347,13 @@ namespace WinForms
             string topic = "home/garden/fountain";
             string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             await  mqHelper.MqProducer(topic,message);
+        }
+
+        private async void button23_Click(object sender, EventArgs e)
+        {
+            string conStr = "PORT=5432;DATABASE=testdb;HOST=49.234.93.236;PASSWORD=Admin12345;USER ID=postgres";
+            SqlHelper sqlHelper = new SqlHelper(conStr, SqlSugar.DbType.PostgreSQL);
+            List<user> a= await sqlHelper.Db.Queryable<user>().ToListAsync();
         }
     }
 }
