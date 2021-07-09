@@ -318,7 +318,7 @@ namespace WinForms
                 {
                     Invoke(new Action(() =>
                     {
-                        textBox7.Text += message;
+                        textBox7.Text += $"{message}\r\n";
                     }));
                 });
             }
@@ -333,6 +333,19 @@ namespace WinForms
                 
             }
             
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+            textBox7.SelectionStart = textBox7.Text.Length;
+            textBox7.ScrollToCaret();
+        }
+
+        private async void button22_Click(object sender, EventArgs e)
+        {
+            string topic = "home/garden/fountain";
+            string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            await  mqHelper.MqProducer(topic,message);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
+using MQTTnet.Client.Publishing;
 using Serilog;
 using System;
 using System.Text;
@@ -109,20 +110,34 @@ namespace CommonV5
         }
 
         // mq生产
-        public async Task<bool> MqProducer()
+        public async Task<bool> MqProducer(string topic,string payload)
         {
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic("MyTopic")
-                .WithPayload("Hello World")
+            MqttApplicationMessage message = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(payload)
                 .WithExactlyOnceQoS()
                 .WithRetainFlag()
                 .Build();
-
-            await _mqttClient.PublishAsync(message, CancellationToken.None);
-            return false;
+            try
+            {
+                MqttClientPublishResult result = await _mqttClient.PublishAsync(message);
+                if (result.ReasonCode == MqttClientPublishReasonCode.Success)
+                {
+                    Log.Debug($"{payload}-ok");
+                    return true;
+                }
+                else
+                {
+                    Log.Information($"{payload}-未发送");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return false;
+            }
         }
-
-        
     }
     
 }

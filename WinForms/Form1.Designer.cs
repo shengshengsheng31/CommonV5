@@ -63,6 +63,7 @@ namespace WinForms
             this.button20 = new System.Windows.Forms.Button();
             this.button21 = new System.Windows.Forms.Button();
             this.textBox7 = new System.Windows.Forms.TextBox();
+            this.button22 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -363,12 +364,24 @@ namespace WinForms
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(201, 108);
             this.textBox7.TabIndex = 31;
+            this.textBox7.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
+            // 
+            // button22
+            // 
+            this.button22.Location = new System.Drawing.Point(583, 296);
+            this.button22.Name = "button22";
+            this.button22.Size = new System.Drawing.Size(75, 23);
+            this.button22.TabIndex = 32;
+            this.button22.Text = "mq生产";
+            this.button22.UseVisualStyleBackColor = true;
+            this.button22.Click += new System.EventHandler(this.button22_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button22);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.button21);
             this.Controls.Add(this.button20);
@@ -444,6 +457,7 @@ namespace WinForms
         private System.Windows.Forms.Button button20;
         private System.Windows.Forms.Button button21;
         private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.Button button22;
     }
 }
 
