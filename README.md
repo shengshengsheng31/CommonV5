@@ -13,3 +13,4 @@
 ## kafka消费、生产
 ## mq连接、订阅、取消订阅
 ## sqlsugar
+## HikSdk
