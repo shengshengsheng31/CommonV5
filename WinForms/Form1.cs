@@ -351,9 +351,22 @@ namespace WinForms
 
         private async void button23_Click(object sender, EventArgs e)
         {
-            string conStr = "PORT=5432;DATABASE=testdb;HOST=49.234.93.236;PASSWORD=Admin12345;USER ID=postgres";
+            string conStr = ConfigHelper.GetConfig("connectionString");
             SqlHelper sqlHelper = new SqlHelper(conStr, SqlSugar.DbType.PostgreSQL);
-            List<user> a= await sqlHelper.Db.Queryable<user>().ToListAsync();
+            List<user> userList= await sqlHelper.Db.Queryable<user>().ToListAsync();
+            dataGridView2.DataSource = userList;
+        }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            string appkey = ConfigHelper.GetConfig("appkey");
+            string secret = ConfigHelper.GetConfig("secret");
+            string ip = ConfigHelper.GetConfig("ip");
+            string uri = "/artemis/api/resource/v2/camera/search";
+            string body = "{\"pageNo\": 1,\"pageSize\": 10}";
+
+            HikHelper.SetPlatformInfo(appkey, secret, ip);
+            byte[] result = HikHelper.HttpPost(uri, body);
         }
     }
 }

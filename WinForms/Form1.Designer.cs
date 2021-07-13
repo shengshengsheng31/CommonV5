@@ -65,7 +65,11 @@ namespace WinForms
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.button22 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
+            this.button24 = new System.Windows.Forms.Button();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTime
@@ -387,11 +391,41 @@ namespace WinForms
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
+            // button24
+            // 
+            this.button24.Location = new System.Drawing.Point(687, 156);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(75, 23);
+            this.button24.TabIndex = 34;
+            this.button24.Text = "api调用";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.button24_Click);
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(687, 185);
+            this.textBox8.Multiline = true;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(201, 68);
+            this.textBox8.TabIndex = 35;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(687, 58);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowTemplate.Height = 25;
+            this.dataGridView2.Size = new System.Drawing.Size(201, 92);
+            this.dataGridView2.TabIndex = 36;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 450);
+            this.ClientSize = new System.Drawing.Size(908, 450);
+            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.textBox8);
+            this.Controls.Add(this.button24);
             this.Controls.Add(this.button23);
             this.Controls.Add(this.button22);
             this.Controls.Add(this.textBox7);
@@ -429,6 +463,7 @@ namespace WinForms
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -471,6 +506,9 @@ namespace WinForms
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Button button22;
         private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.Button button24;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }
 

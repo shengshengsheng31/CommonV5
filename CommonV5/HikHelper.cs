@@ -38,7 +38,7 @@ namespace CommonV5
         /// <param name="uri">HTTP接口Url，不带协议和端口，如/artemis/api/resource/v1/cameras/indexCode?cameraIndexCode=a10cafaa777c49a5af92c165c95970e0</param>
         /// <param name="timeout">请求超时时间，单位：秒</param>
         /// <returns></returns>
-        public static byte[] HttpGet(string uri, int timeout)
+        public static byte[] HttpGet(string uri, int timeout=30)
         {
             Dictionary<string, string> header = new Dictionary<string, string>();
 
@@ -115,7 +115,7 @@ namespace CommonV5
         /// <param name="body">请求参数</param>
         /// <param name="timeout">请求超时时间，单位：秒</param>
         /// <return>请求结果</return>
-        public static byte[] HttpPost(string uri, string body, int timeout)
+        public static byte[] HttpPost(string uri, string body, int timeout=30)
         {
             Dictionary<string, string> header = new Dictionary<string, string>();
 
@@ -278,8 +278,11 @@ namespace CommonV5
                 // set remote certificate Validation auto pass
                 ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(remoteCertificateValidate);
                 // FIX：修复不同.Net版对一些SecurityProtocolType枚举支持情况不一致导致编译失败等问题，这里统一使用数值
-                ServicePointManager.SecurityProtocol = (SecurityProtocolType)48 | (SecurityProtocolType)3072 | (SecurityProtocolType)768 | (SecurityProtocolType)192;
+                //ServicePointManager.SecurityProtocol = (SecurityProtocolType)48 | (SecurityProtocolType)3072 | (SecurityProtocolType)768 | (SecurityProtocolType)192;
                 //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
+
             }
         }
 
