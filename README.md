@@ -14,3 +14,4 @@
 ## mq连接、订阅、取消订阅
 ## sqlsugar
 ## HikSdk测试调用
+## 万用post接口
