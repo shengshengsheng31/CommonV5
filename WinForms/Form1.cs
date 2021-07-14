@@ -357,7 +357,7 @@ namespace WinForms
             dataGridView2.DataSource = userList;
         }
 
-        private void button24_Click(object sender, EventArgs e)
+        private  void button24_Click(object sender, EventArgs e)
         {
             string appkey = ConfigHelper.GetConfig("appkey");
             string secret = ConfigHelper.GetConfig("secret");
@@ -365,8 +365,12 @@ namespace WinForms
             string uri = "/artemis/api/resource/v2/camera/search";
             string body = "{\"pageNo\": 1,\"pageSize\": 10}";
 
-            HikHelper.SetPlatformInfo(appkey, secret, ip);
-            byte[] result = HikHelper.HttpPost(uri, body);
+            HikHelper.SetPlatformInfo(appkey, secret, ip, 10443);
+            var res = HikHelper.HttpPost(uri, body, 100);
+            string result = Encoding.UTF8.GetString(res);
+
+
+            textBox8.Text += $"{result}\r\n";
         }
     }
 }

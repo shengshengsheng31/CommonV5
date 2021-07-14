@@ -1,5 +1,4 @@
-﻿using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,18 +7,20 @@ using System.Net.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonV5
 {
     public class HikHelper
     {
-        private static string _ip;
-        private static int _port = 443;
-        private static string _appkey;
-        private static string _secret;
-        private static bool _isHttps = true;
-
+        /// <summary>
+        /// 设置信息参数
+        /// </summary>
+        /// <param name="appkey">合作方APPKey</param>
+        /// <param name="secret">合作方APPSecret</param>
+        /// <param name="ip">平台IP</param>
+        /// <param name="port">平台端口，默认HTTPS的443端口</param>
+        /// <param name="isHttps">是否启用HTTPS协议，默认HTTPS</param>
+        /// <return></return>
         public static void SetPlatformInfo(string appkey, string secret, string ip, int port = 443, bool isHttps = true)
         {
             _appkey = appkey;
@@ -38,7 +39,7 @@ namespace CommonV5
         /// <param name="uri">HTTP接口Url，不带协议和端口，如/artemis/api/resource/v1/cameras/indexCode?cameraIndexCode=a10cafaa777c49a5af92c165c95970e0</param>
         /// <param name="timeout">请求超时时间，单位：秒</param>
         /// <returns></returns>
-        public static byte[] HttpGet(string uri, int timeout=30)
+        public static byte[] HttpGet(string uri, int timeout)
         {
             Dictionary<string, string> header = new Dictionary<string, string>();
 
@@ -49,7 +50,7 @@ namespace CommonV5
             StringBuilder sb = new StringBuilder();
             sb.Append(_isHttps ? "https://" : "http://").Append(_ip).Append(":").Append(_port.ToString()).Append(uri);
 
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(sb.ToString());
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(sb.ToString());
             req.KeepAlive = false;
             req.ProtocolVersion = HttpVersion.Version11;
             req.AllowAutoRedirect = false;   // 不允许自动重定向
@@ -76,7 +77,7 @@ namespace CommonV5
                     StreamReader sr = new StreamReader(rspStream);
                     string strStream = sr.ReadToEnd();
                     long streamLength = strStream.Length;
-                    byte[] response = Encoding.UTF8.GetBytes(strStream);
+                    byte[] response = System.Text.Encoding.UTF8.GetBytes(strStream);
                     rsp.Close();
                     return response;
                 }
@@ -96,13 +97,12 @@ namespace CommonV5
 
                 rsp.Close();
             }
-            catch (WebException ex)
+            catch (WebException e)
             {
                 if (rsp != null)
                 {
                     rsp.Close();
                 }
-                Log.Error(ex, ex.Message);
             }
 
             return null;
@@ -115,7 +115,7 @@ namespace CommonV5
         /// <param name="body">请求参数</param>
         /// <param name="timeout">请求超时时间，单位：秒</param>
         /// <return>请求结果</return>
-        public static byte[] HttpPost(string uri, string body, int timeout=30)
+        public static byte[] HttpPost(string uri, string body, int timeout)
         {
             Dictionary<string, string> header = new Dictionary<string, string>();
 
@@ -156,13 +156,13 @@ namespace CommonV5
                     reqStream.Write(postBytes, 0, postBytes.Length);
                     reqStream.Close();
                 }
-                catch (WebException ex)
+                catch (WebException e)
                 {
                     if (reqStream != null)
                     {
                         reqStream.Close();
                     }
-                    Log.Error(ex, ex.Message);
+
                     return null;
                 }
             }
@@ -177,7 +177,7 @@ namespace CommonV5
                     StreamReader sr = new StreamReader(rspStream);
                     string strStream = sr.ReadToEnd();
                     long streamLength = strStream.Length;
-                    byte[] response = Encoding.UTF8.GetBytes(strStream);
+                    byte[] response = System.Text.Encoding.UTF8.GetBytes(strStream);
                     rsp.Close();
                     return response;
                 }
@@ -207,35 +207,26 @@ namespace CommonV5
 
                         return response;
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
                         rsp.Close();
-                        Log.Error(ex, ex.Message);
                         return null;
                     }
                 }
 
                 rsp.Close();
             }
-            catch (WebException ex)
+            catch (WebException e)
             {
                 if (rsp != null)
                 {
                     rsp.Close();
                 }
-                Log.Error(ex, ex.Message);
             }
 
             return null;
         }
 
-        /// <summary>
-        /// 对请求头与https做处理
-        /// </summary>
-        /// <param name="header"></param>
-        /// <param name="url"></param>
-        /// <param name="body"></param>
-        /// <param name="isPost"></param>
         private static void initRequest(Dictionary<string, string> header, string url, string body, bool isPost)
         {
             // Accept                
@@ -254,14 +245,13 @@ namespace CommonV5
             }
 
             // x-ca-timestamp
-            
-            //string timestamp = ((DateTime.Now.Ticks - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1, 0, 0, 0, 0)).Ticks) / 1000).ToString();
-            string timestamp = ((DateTime.Now.Ticks - TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1, 0, 0, 0, 0), TimeZoneInfo.Local).Ticks) / 1000).ToString();
+            string timestamp = ((DateTime.Now.Ticks - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1, 0, 0, 0, 0)).Ticks) / 1000).ToString();
             header.Add("x-ca-timestamp", timestamp);
 
             // x-ca-nonce
-            string nonce = Guid.NewGuid().ToString();
+            string nonce = System.Guid.NewGuid().ToString();
             header.Add("x-ca-nonce", nonce);
+
 
             // x-ca-key
             header.Add("x-ca-key", _appkey);
@@ -276,13 +266,10 @@ namespace CommonV5
             if (_isHttps)
             {
                 // set remote certificate Validation auto pass
-                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(remoteCertificateValidate);
+                ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(remoteCertificateValidate);
                 // FIX：修复不同.Net版对一些SecurityProtocolType枚举支持情况不一致导致编译失败等问题，这里统一使用数值
                 //ServicePointManager.SecurityProtocol = (SecurityProtocolType)48 | (SecurityProtocolType)3072 | (SecurityProtocolType)768 | (SecurityProtocolType)192;
-                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-
             }
         }
 
@@ -294,7 +281,7 @@ namespace CommonV5
         private static string computeContentMd5(string body)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] result = md5.ComputeHash(Encoding.UTF8.GetBytes(body));
+            byte[] result = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(body));
             return Convert.ToBase64String(result);
         }
 
@@ -319,7 +306,7 @@ namespace CommonV5
         /// <returns>HMAXH265计算结果字符串</returns>
         private static string computeForHMACSHA256(string str, string secret)
         {
-            UTF8Encoding encoder = new UTF8Encoding();
+            var encoder = new System.Text.UTF8Encoding();
             byte[] secretBytes = encoder.GetBytes(secret);
             byte[] strBytes = encoder.GetBytes(str);
             var opertor = new HMACSHA256(secretBytes);
@@ -407,5 +394,30 @@ namespace CommonV5
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// 平台ip
+        /// </summary>
+        private static string _ip;
+
+        /// <summary>
+        /// 平台端口
+        /// </summary>
+        private static int _port = 443;
+
+        /// <summary>
+        /// 平台APPKey
+        /// </summary>
+        private static string _appkey;
+
+        /// <summary>
+        /// 平台APPSecret
+        /// </summary>
+        private static string _secret;
+
+        /// <summary>
+        /// 是否使用HTTPS协议
+        /// </summary>
+        private static bool _isHttps = true;
     }
 }
