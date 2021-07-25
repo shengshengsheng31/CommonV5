@@ -46,7 +46,7 @@ namespace CommonV5
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool AddConfig(string key,string value)
+        public static bool AddOrSetConfig(string key,string value)
         {
             try
             {
@@ -55,9 +55,18 @@ namespace CommonV5
                     ExeConfigFilename = configFileName
                 };
                 Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(exeConfigurationFileMap, ConfigurationUserLevel.None);
-                configuration.AppSettings.Settings.Add(key, value);
+                // 查看是否已存在该key
+                if (configuration.AppSettings.Settings.AllKeys.Contains(key))
+                {
+                    configuration.AppSettings.Settings[key].Value = value;
+                    Log.Information($"修改{key}:{value}-ok");
+                }
+                else
+                {
+                    configuration.AppSettings.Settings.Add(key, value);
+                    Log.Information($"新增{key}:{value}-ok");
+                }
                 configuration.Save();
-                Log.Information($"新增{key}:{value}-ok");
                 return true;
             }
             catch (Exception ex)

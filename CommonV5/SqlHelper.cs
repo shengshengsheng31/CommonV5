@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace CommonV5
 {
-    public class SqlHelper
+    public abstract class SqlHelper
     {
-        public SqlSugarClient Db { get; set; }
+        protected SqlSugarClient Db { get; set; }
         public SqlHelper(string connectionString, DbType dbType)
         {
             Db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = connectionString,
-                DbType = DbType.PostgreSQL,
+                DbType = dbType,
                 IsAutoCloseConnection = true,
             });
         }
-        
     }
 }
