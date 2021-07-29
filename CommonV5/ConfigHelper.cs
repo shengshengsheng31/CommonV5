@@ -29,7 +29,7 @@ namespace CommonV5
                 };
                 Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(exeConfigurationFileMap, ConfigurationUserLevel.None);
                 string value = configuration.AppSettings.Settings[key].Value;
-                Log.Information($"读取{key}:{value}-ok");
+                Log.Debug($"读取{key}:{value}-ok");
                 return value;
             }
             catch (Exception ex)
@@ -59,12 +59,12 @@ namespace CommonV5
                 if (configuration.AppSettings.Settings.AllKeys.Contains(key))
                 {
                     configuration.AppSettings.Settings[key].Value = value;
-                    Log.Information($"修改{key}:{value}-ok");
+                    Log.Debug($"修改{key}:{value}-ok");
                 }
                 else
                 {
                     configuration.AppSettings.Settings.Add(key, value);
-                    Log.Information($"新增{key}:{value}-ok");
+                    Log.Debug($"新增{key}:{value}-ok");
                 }
                 configuration.Save();
                 return true;
@@ -94,7 +94,7 @@ namespace CommonV5
                 Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(exeConfigurationFileMap, ConfigurationUserLevel.None);
                 configuration.AppSettings.Settings[key].Value = value;
                 configuration.Save();
-                Log.Information($"修改{key}:{value}-ok");
+                Log.Debug($"修改{key}:{value}-ok");
                 return true;
             }
             catch (Exception ex)
@@ -121,7 +121,7 @@ namespace CommonV5
                 Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(exeConfigurationFileMap, ConfigurationUserLevel.None);
                 configuration.AppSettings.Settings.Remove(key);
                 configuration.Save();
-                Log.Information($"删除{key}-ok");
+                Log.Debug($"删除{key}-ok");
                 return true;
             }
             catch (Exception ex)

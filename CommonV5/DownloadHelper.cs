@@ -36,7 +36,7 @@ namespace CommonV5
                             if (sz == 0) break;
                             fs.Write(buffer, 0, sz);
                         }
-                        Log.Information($"{url}下载{filePath}-ok");
+                        Log.Debug($"{url}下载{filePath}-ok");
                         return true;
                     }
                 }

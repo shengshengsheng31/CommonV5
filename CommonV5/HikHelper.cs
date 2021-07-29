@@ -12,6 +12,7 @@ namespace CommonV5
 {
     public class HikHelper
     {
+        #region 基础认证
         /// <summary>
         /// 设置信息参数
         /// </summary>
@@ -419,5 +420,21 @@ namespace CommonV5
         /// 是否使用HTTPS协议
         /// </summary>
         private static bool _isHttps = true;
+        #endregion
+
+        #region api接口
+        public static string QueryVehiclesByAttrWithPage(string beginTime, string endTime, int pageNo = 1, int pageSize = 1)
+        {
+            string uri = "/artemis/api/aiapplication/v1/vehicle/queryVehiclesByAttrWithPage";
+            //string body = "{\"pageNo\": 1,\"pageSize\": 1,\"beginTime\": \"2021-07-24T00:00:00.000+08:00\",\"endTime\": \"2021-07-25T23:29:29.000+08:00\"}";
+            string body = "{\"pageNo\": 1,\"pageSize\": 1,\"beginTime\": \"" + beginTime + "T00:00:00.000+08:00\",\"endTime\": \"" + endTime + "T23:29:29.000+08:00\"}";
+            byte[] resultByte = HikHelper.HttpPost(uri, body, 60);
+            string result = Encoding.UTF8.GetString(resultByte);
+            return result;
+        }
+        #endregion
     }
+
+
+
 }

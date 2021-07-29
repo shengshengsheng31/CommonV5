@@ -365,6 +365,7 @@ namespace WinForms
             string uri = "/artemis/api/resource/v2/camera/search";
             string body = "{\"pageNo\": 1,\"pageSize\": 10}";
 
+            
             HikHelper.SetPlatformInfo(appkey, secret, ip, 10443);
             var res = HikHelper.HttpPost(uri, body, 100);
             string result = Encoding.UTF8.GetString(res);

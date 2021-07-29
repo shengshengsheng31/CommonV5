@@ -47,7 +47,7 @@ namespace CommonV5
                         consumer.Seek(new TopicPartitionOffset(topicPartition, consumer.GetWatermarkOffsets(topicPartition).High));
                     }
                 }
-                Log.Information($"topic:{topicName} partitionCount:{consumer.Assignment.Count}");
+                Log.Debug($"topic:{topicName} partitionCount:{consumer.Assignment.Count}");
                 try
                 {
                     // 持续监听至cancel

@@ -36,7 +36,7 @@ namespace CommonV5
             // 连接到mq server触发事件
             _mqttClient.UseConnectedHandler(e =>
             {
-                Log.Information("连接服务器-ok");
+                Log.Debug("连接服务器-ok");
             });
             // 断开连接或无法连接触发事件
             _mqttClient.UseDisconnectedHandler(e =>
@@ -75,7 +75,7 @@ namespace CommonV5
                 try
                 {
                     await _mqttClient.SubscribeAsync(topic);
-                    Log.Information($"订阅{topic}-ok");
+                    Log.Debug($"订阅{topic}-ok");
                     return true;
                 }
                 catch (Exception ex)
@@ -99,7 +99,7 @@ namespace CommonV5
             try
             {
                 await _mqttClient.UnsubscribeAsync(topic);
-                Log.Information($"取消订阅{topic}");
+                Log.Debug($"取消订阅{topic}");
                 return true;
             }
             catch (Exception ex)
@@ -128,7 +128,7 @@ namespace CommonV5
                 }
                 else
                 {
-                    Log.Information($"{payload}-未发送");
+                    Log.Debug($"{payload}-未发送");
                     return false;
                 }
             }

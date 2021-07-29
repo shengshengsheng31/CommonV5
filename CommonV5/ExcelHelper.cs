@@ -99,7 +99,7 @@ namespace CommonV5
                         }
                         dataTable.Rows.Add(dataRow);
                     }
-                    Log.Information($"读取{filePath}-ok");
+                    Log.Debug($"读取{filePath}-ok");
                     return dataTable;
                 }
             }
@@ -148,7 +148,7 @@ namespace CommonV5
                         workbook.Write(fs);//向打开的这个xls文件中写入数据  
                     }
                 }
-                Log.Information($"写入{filePath}-ok");
+                Log.Debug($"写入{filePath}-ok");
                 return true;
             }
             catch (Exception ex)

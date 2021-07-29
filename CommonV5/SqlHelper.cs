@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace CommonV5
 {
-    public abstract class SqlHelper
+    public class SqlHelper
     {
-        protected SqlSugarClient Db { get; set; }
+        public SqlSugarClient Db { get; set; }
         public SqlHelper(string connectionString, DbType dbType)
         {
             Db = new SqlSugarClient(new ConnectionConfig()

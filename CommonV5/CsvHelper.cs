@@ -45,7 +45,7 @@ namespace CommonV5
                             sw.WriteLine(rowText);
                         }
                     }
-                    Log.Information($"读取{filePath}-ok");
+                    Log.Debug($"读取{filePath}-ok");
                     return true;
                 }
             }

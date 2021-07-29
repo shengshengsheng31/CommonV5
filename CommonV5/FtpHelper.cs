@@ -47,7 +47,7 @@ namespace CommonV5
                             string filePath = $"{ftpPath}{reader.ReadLine()}";
                             filePathList.Add(filePath);
                         }
-                        Log.Information($"获取{ftpPath}-ok");
+                        Log.Debug($"获取{ftpPath}-ok");
                         return filePathList;
                     }
                 }
@@ -82,7 +82,7 @@ namespace CommonV5
                         memoryStream.Write(buffer, 0, sz);
                     }
                     memoryStream.Position = 0;
-                    Log.Information($"下载{ftpFilePath}-ok");
+                    Log.Debug($"下载{ftpFilePath}-ok");
                     return memoryStream;
                 }
             }
@@ -117,7 +117,7 @@ namespace CommonV5
                             if (sz == 0) break;
                             fs.Write(buffer, 0, sz);
                         }
-                        Log.Information($"下载{ftpFilePath}到{localFilePath}-ok");
+                        Log.Debug($"下载{ftpFilePath}到{localFilePath}-ok");
                         return true;
                     }
                 }
@@ -151,7 +151,7 @@ namespace CommonV5
                         requestStream.Write(buffer, 0, sz);
                     }
                     stream.Close();
-                    Log.Information($"上传{ftpFilePath}-ok");
+                    Log.Debug($"上传{ftpFilePath}-ok");
                     return true;
                 }
             }
@@ -187,7 +187,7 @@ namespace CommonV5
                             if (sz == 0) break;
                             requestStream.Write(buffer, 0, sz);
                         }
-                        Log.Information($"上传{ftpFilePath}-ok");
+                        Log.Debug($"上传{ftpFilePath}-ok");
                         return true;
                     }
                 }
@@ -212,7 +212,7 @@ namespace CommonV5
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    Log.Information($"删除{ftpFilePath}-ok");
+                    Log.Debug($"删除{ftpFilePath}-ok");
                     return true;
                 }
             }
@@ -237,7 +237,7 @@ namespace CommonV5
                 request.Method = WebRequestMethods.Ftp.MakeDirectory;
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    Log.Information($"创建{ftpDirPath}-ok");
+                    Log.Debug($"创建{ftpDirPath}-ok");
                     return true;
                 }
             }

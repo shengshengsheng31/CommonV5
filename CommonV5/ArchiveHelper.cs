@@ -43,7 +43,7 @@ namespace CommonV5
                                 Log.Debug($"删除源文件{fileName}-ok");
                             }
                         }
-                        Log.Information($"完成压缩{zipFilePath}-ok");
+                        Log.Debug($"完成压缩{zipFilePath}-ok");
                         return true;
                     }
                 }
@@ -67,13 +67,13 @@ namespace CommonV5
                     //ZipFile.ExtractToDirectory(zipFilePath, extractPath,Encoding.GetEncoding("GB2312"));
                     ZipFile.ExtractToDirectory(zipFilePath, extractPath);
                     //archive.ExtractToDirectory(extractPath);
-                    Log.Information($"{zipFilePath}解压{extractPath}-ok");
+                    Log.Debug($"{zipFilePath}解压{extractPath}-ok");
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                Log.Information(ex, ex.Message);
+                Log.Debug(ex, ex.Message);
                 return false;
             }
             

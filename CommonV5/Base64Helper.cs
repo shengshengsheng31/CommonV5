@@ -24,7 +24,7 @@ namespace CommonV5
                 await stream.ReadAsync(buffer, 0, buffer.Length);
                 stream.Position = 0;
                 string result = Convert.ToBase64String(buffer);
-                Log.Information($"stream:{stream.Length}转base64-ok");
+                Log.Debug($"stream:{stream.Length}转base64-ok");
                 stream.Close();
                 return result;
             }
@@ -49,7 +49,7 @@ namespace CommonV5
                     byte[] buffer = new byte[fs.Length];
                     await fs.ReadAsync(buffer, 0, buffer.Length);
                     string result = Convert.ToBase64String(buffer);
-                    Log.Information($"file:{file.Name}转base64-ok");
+                    Log.Debug($"file:{file.Name}转base64-ok");
                     return result;
                 }
             }
@@ -90,7 +90,7 @@ namespace CommonV5
                     {
                         // 后续可定制保存格式
                         bitmap.Save(imgPath, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        Log.Information($"base64转{imgPath}-ok");
+                        Log.Debug($"base64转{imgPath}-ok");
                         return true;
                     }
                 }
