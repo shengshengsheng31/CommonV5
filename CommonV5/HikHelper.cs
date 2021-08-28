@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -423,14 +424,37 @@ namespace CommonV5
         #endregion
 
         #region api接口
-        public static string QueryVehiclesByAttrWithPage(string beginTime, string endTime, int pageNo = 1, int pageSize = 1)
+        public static string QueryVehiclesByAttrWithPage(DateTime beginTime, DateTime endTime, int pageNo = 1, int pageSize = 1,string plateNo=null,string unitIndexCodes=null)
         {
-            string uri = "/artemis/api/aiapplication/v1/vehicle/queryVehiclesByAttrWithPage";
-            //string body = "{\"pageNo\": 1,\"pageSize\": 1,\"beginTime\": \"2021-07-24T00:00:00.000+08:00\",\"endTime\": \"2021-07-25T23:29:29.000+08:00\"}";
-            string body = "{\"pageNo\": 1,\"pageSize\": 1,\"beginTime\": \"" + beginTime + "T00:00:00.000+08:00\",\"endTime\": \"" + endTime + "T23:29:29.000+08:00\"}";
-            byte[] resultByte = HikHelper.HttpPost(uri, body, 60);
-            string result = Encoding.UTF8.GetString(resultByte);
-            return result;
+            try
+            {
+                string uri = "/artemis/api/aiapplication/v1/vehicle/queryVehiclesByAttrWithPage";
+                string body = "{\"pageNo\": 1,\"pageSize\": 1" +
+                    ",\"beginTime\": \"" + beginTime.ToString("yyyy-MM-dd") + "T00:00:00.000+08:00\",\"endTime\": \"" + endTime.ToString("yyyy-MM-dd") + "T23:29:29.000+08:00\"";
+                // 附加条件
+                // 车牌
+                if (plateNo!=null&&plateNo!="")
+                {
+                    body+= ",\"plateNo\": \"" + plateNo + "\"";
+                }
+                // 组织
+                if (unitIndexCodes != null && plateNo != "")
+                {
+                    body += ",\"unitIndexCodes\":\"" + unitIndexCodes + "\"";
+                }
+                // 结束条件
+                body += "}";
+                byte[] resultByte = HttpPost(uri, body, 60);
+                string result = Encoding.UTF8.GetString(resultByte);
+                Log.Debug($"{nameof(QueryVehiclesByAttrWithPage)}-ok");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return null;
+            }
+            
         }
         #endregion
     }

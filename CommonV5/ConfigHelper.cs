@@ -37,7 +37,34 @@ namespace CommonV5
                 Log.Error(ex, ex.Message);
                 return null;
             }
-            
+        }
+        /// <summary>
+        /// 查所有配置
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string,string> GetAllConfig()
+        {
+            try
+            {
+                Dictionary<string, string> configDic = new Dictionary<string, string>();
+                ExeConfigurationFileMap exeConfigurationFileMap = new ExeConfigurationFileMap()
+                {
+                    ExeConfigFilename = configFileName
+                };
+                Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(exeConfigurationFileMap, ConfigurationUserLevel.None);
+                foreach (string key in configuration.AppSettings.Settings.AllKeys)
+                {
+                    string value = configuration.AppSettings.Settings[key].Value;
+                    configDic.Add(key, value);
+                }
+                Log.Debug($"读取所有值{configDic.Count}-ok");
+                return configDic;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return null;
+            }
         }
 
         /// <summary>
